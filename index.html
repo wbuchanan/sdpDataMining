@@ -346,8 +346,9 @@
 						</code></pre>
 					</section>
 					<section>
+						<br><br>
 						<p>Can also put together more complex queries and restrict the fields that are returned</p>
-						<pre><code data-trim data-noescape>
+						<pre><code data-trim>
 							GET /research_requests/request/_search
 {
     "query": {
@@ -371,6 +372,43 @@
 						</code></pre>
 					</section>
 					<section>
+						<br><br>
+						<p>Find education legislation sponsored by democrats that was passed into law</p>
+						<pre><code data-trim>
+							GET /legiscan/bill_doc/_search
+{
+    "from": 0, "size": 500,
+    "query" : { "bool" : {
+        "must": [ { "match": { "description": "education" } },
+           { "nested": { "path": "progress",
+  		"query": { "match": { "progress.event": "Passed" } } }
+            },
+            { "nested": { "path": "sponsors",
+                "query": { "match": { "sponsors.party": "D" } } }
+            }] }
+    }
+}
+						</code></pre>
+					</section>
+					<section>
+						<br><br>
+						<p>Or find charter laws sponsored by republicans</p>
+						<pre><code data-trim>
+							GET /legiscan/bill_doc/_search
+{
+    "from": 0, "size": 500,
+    "query" : { "bool" : {
+        "must": [ { "match": { "description": "charter" } },
+            { "match": { "description": "school" } },
+            { "nested": { "path": "sponsors",
+               "query": { "match": { "sponsors.party": "R" } } }
+            }] }
+    }
+}
+						</code></pre>
+
+					</section>
+					<section>
 						<p>Can also query records based on the data underlying the position of the mouse in the visualization</p>
 						<pre><code data-trim data-noescape>
 							GET shinyapp/userData/_search
@@ -384,13 +422,6 @@
     }
   }
 }
-						</code></pre>
-					</section>
-					<section>
-						<br><br>
-						<p>Can use these tools to monitor important legislation as well:</p>
-						<pre><code data-trim data-noescape>
-curl -XGET 'localhost:9200/legiscan/bill_doc/_search?q=description=charter&description=school'
 						</code></pre>
 					</section>
 					<section>
@@ -428,14 +459,10 @@ curl -XGET 'localhost:9200/legiscan/bill_doc/_search?q=description=charter&descr
 						<h3>Differentiation</h3>
 						<ul>
 							<li>No need to differentiate instruction based on unidimensional frameworks</li>
-							<li>Using LCA/LTA and/or other clustering algorithms, we can suggest empirically derived groups based on data from multiple dimensions</li>
-						</ul>
-					</section>
-					<section>
-						<br><br>
-						<h3></h3>
-						<ul>
-							<li></li>
+							<li>Using LCA/LTA and/or other clustering algorithms, we can suggest empirically derived
+								groups based on data from multiple dimensions</li>
+							<li>We can use the same techniques to identify heterogeneous groups of educators so we can
+							improve our service delivery model with regards to supporting their use of data. </li>
 						</ul>
 					</section>
 				</section>
@@ -448,9 +475,9 @@ curl -XGET 'localhost:9200/legiscan/bill_doc/_search?q=description=charter&descr
 				<section data-autoslide="2500">
 					<small>Oh...and just in case I forgot to mention this already....</small>
 				</section>
-				<section>
-					<h1>I'm Hiring</h1>
-					<p><a href="https://www.applitrack.com/fayette/onlineapp/jobpostings/view.asp?internaltransferform.Url=&category=Technology+-+Salaried" class="reveal" style="color:#ffff00; font-weight:bold; font-size: 42px;">
+				<section style="background-color: #FFF;">
+					<h1 style="color: #000000">I'm Hiring</h1>
+					<p style="background-color: #FFF;"><a href="https://www.applitrack.com/fayette/onlineapp/jobpostings/view.asp?internaltransferform.Url=&category=Technology+-+Salaried" class="reveal" style="color:#0000FF; font-weight:bold; font-size: 42px;">
 					If you or anyone you know might be interested in moving to Wildcat country to change how data is used in education, let me know or click on this link to see the posting.
 					</a></p>
 					<aside class="notes">

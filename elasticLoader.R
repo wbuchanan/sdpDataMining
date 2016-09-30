@@ -2,31 +2,43 @@ library(magrittr)
 library(doMC)
 source('~/Desktop/msLegislation/legiscanR/R/fileStructures.R')
 source('~/Desktop/msLegislation/legiscanR/R/fileLists.R')
-registerDoMC(cores = 8)
+registerDoMC(cores = 16)
 
+# Builds object with file list structure
 files <- fileStructure("/Users/fcps/Desktop/kyLegislation/") %>% fileLists()
 
-httr::DELETE("127.0.0.1:9200/legislation")
-
+# Defines the legislation index settings
 legiscan <- '{
 "settings": {
 "index": {
-"integer_of_shards": 5,
-"integer_of_replicas": 1
+"number_of_shards" : 3,
+"number_of_replicas" : 1
 }
 }
 }'
 
+httr::DELETE('127.0.0.1:9200/legislation')
 httr::PUT('127.0.0.1:9200/legislation', body = legiscan, encode = "json")
 
-peeps <- plyr::ldply(as.list(c(1:length(people))), .parallel = FALSE, .fun = function(x) {
-	jsonlite::fromJSON(people[[x]], simplifyVector = TRUE, flatten = TRUE)[[1]] %>%
-		dplyr::as_data_frame()
+# Handles munging all of the people data files
+peeps <- plyr::ldply(as.list(unlist(files[["people"]])), .parallel = FALSE, .fun = function(x) {
+	jsonlite::fromJSON(x, simplifyVector = TRUE, flatten = TRUE)[[1]] %>%
+				dplyr::as_data_frame()
 })
+
+names(peeps) <- c("session_name", "people_id", "role_id", "role", "party_id", "party",
+				 "committee_id", "name", "first_name", "middle_name", "last_name", "suffix",
+				 "nickname", "ftm_eid", "district", "committee_sponsor")
+
+
+# Establish connection to elasticsearch
 elastic::connect("localhost")
+
+# Loads the people into the index
 elastic::docs_bulk(peeps, index = "legislation", type = "people",
 				   es_ids = TRUE, raw = FALSE)
 
+# Defines function for handling the data
 nlegiBillJSON <- function(x) {
 	billob <- jsonlite::fromJSON(x, simplifyVector = TRUE, flatten = TRUE)[["bill"]]
 	billob <- c(billob, "session_id" = billob[["session"]][["session_id"]],
@@ -93,27 +105,25 @@ nlegiBillJSON <- function(x) {
 				   "supplements" = supplements, "calendar" = calendar)
 
 	return(retval)
-})
+}
 
+# Creates an empty bills object
 bills <- list()
+
+# loads all of the documents into the bills object
 for (i in names(files[["bills"]])) {
 	bills[[i]] <- plyr::llply(files[["bills"]][[i]], nlegiBillJSON, .parallel = TRUE)
 }
+
+# Removes top layer of the list
 bills2 <- plyr::llply(bills, unlist, recursive = FALSE, .parallel = TRUE)
 
-legislation <- list()
-progress <- list()
-committee <- list()
-history <- list()
-sponsors <- list()
-sasts <- list()
-subjects <- list()
-texts <- list()
-votes <- list()
-amendments <- list()
-supplements <- list()
-calendar <- list()
+# Creates a series of empty list objects for containers
+legislation <- list(); progress <- list(); committee <- list(); history <- list()
+sponsors <- list(); sasts <- list(); subjects <- list(); texts <- list()
+votes <- list(); amendments <- list(); supplements <- list(); calendar <- list()
 
+# pulls out the individual tables of data from the bills files
 for(i in names(bills2)) {
 	legislation[[i]] <-	plyr::ldply(bills2[[i]][names(bills2[[i]]) == "bill"],
 									dplyr::bind_rows, .parallel = TRUE)
@@ -140,6 +150,8 @@ for(i in names(bills2)) {
 	calendar <- plyr::ldply(bills2[[i]][names(bills2[[i]]) == "calendar"],
 							dplyr::bind_rows, .parallel = TRUE)
 }
+
+# Modifies the variable names in the data frames
 legislation %<>% plyr::ldply(.id = "session_name", .parallel = TRUE, dplyr::bind_rows)
 names(amendments) <- c("id", "amendment_id", "adopted", "date", "title", "description", "mime", "url", "state_link")
 names(calendar) <- c("id", "type_id", "type", "date", "time", "location", "description")
@@ -157,6 +169,7 @@ names(supplements) <- c("id", "supplement_id", "date", "type_id", "type", "title
 						"url", "state_link")
 names(texts) <- c("id", "doc_id", "date", "type", "mime", "url", "state_link", "text_size")
 
+# Loads the different types into the index
 elastic::docs_bulk(amendments, index = "legislation", type = "amendments",
 				   es_ids = TRUE, raw = FALSE)
 elastic::docs_bulk(calendar, index = "legislation", type = "calendar",

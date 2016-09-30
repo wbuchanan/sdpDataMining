@@ -1,13 +1,16 @@
 library(magrittr)
-requestIndex <-'{
+
+# Defines the research request index...since this is small it won't be sharded too much
+requestIndex <- '
+{
 "settings" : {
 "index" : {
-"number_of_shards" : 5, 
-"number_of_replicas" : 1 
+"number_of_shards" : 3,
+"number_of_replicas" : 1
 },
 "mappings": {
 "request" : {
-"properties": {	
+"properties": {
 "id": { "type": "integer" },
 "Status": { "type": "string", "index": "not_analyzed" },
 "StatusDate": { "type": "date", "format": "yyyy-MM-dd HH:mm:ss" },
@@ -69,14 +72,23 @@ requestIndex <-'{
 "TypePersonnel": { "type": "string", "index": "analyzed" },
 "FileType": { "type": "string", "index": "analyzed" }
 }
-}    
+}
+}
 }
 }'
 
+# Reads the data from an HTML table
 theData <- xml2::read_html("~/Desktop/researchRequestData.html") %>% rvest::html_table()
+
+# Gets the data frame element out of the list object
 theData <- theData[[1]]
 
+# Establishes connection to elasticsearch database locally
 elastic::connect("localhost")
+
+# Creates the index with the settings in the requestIndex object
 elastic::index_create("research_requests", body = requestIndex, raw = FALSE)
-elastic::docs_bulk(theData, index = "research_requests", type = "request", 
+
+# Loads the documents into the index
+elastic::docs_bulk(theData, index = "research_requests", type = "request",
            es_ids = TRUE, raw = FALSE)

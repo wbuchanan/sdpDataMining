@@ -9,8 +9,8 @@ billDoc <- '
 {
 	"settings": {
 		"index": {
-			"integer_of_shards": 5,
-			"integer_of_replicas": 1
+			"number_of_shards" : 10,
+			"number_of_replicas" : 1
 		}
 	},
 	"mappings": {
@@ -153,6 +153,7 @@ listelems <- c("bill_id", "change_hash", "session", "url", "state_link", "comple
 
 httr::PUT('127.0.0.1:9200/legiscan', body = billDoc, encode = "json")
 elastic::connect()
+
 id <- 0
 
 lev1nm <- names(files[["bills"]])
