@@ -1,0 +1,136 @@
+GET /research_requests/request/_search
+{
+    "query": {
+        "bool": {
+            "must": {
+                "match" : {
+                    "InternalExternal" : "Internal" 
+                }
+            },    
+            "must_not": { 
+                "match" : {
+                    "Status" : "Completed" 
+                }
+            }    
+        }
+    },
+    "fields": [ "StatusDate", "AssignedTo", "Status", "DataUsedFor", "DataNeeded" ]
+}
+
+GET /research_requests/request/_search
+{
+    "query" : {
+        "fuzzy": {
+            "DataUsedFor" : {
+                "value": "math",
+                "boost" :         1.0,
+                "fuzziness" :     7,
+                "prefix_length" : 0,
+                "max_expansions": 100
+            }
+        }
+    },    
+    "fields" : ["FName", "LName", "StatusDate", "InternalExternal", 
+                "ResQuestions", "ResProblem", "Hypothesis", 
+                "ResDesign", "Methodology", "Materials", 
+                "StudentRecords", "DataUsedFor"]
+}                    
+
+
+
+GET /legislation/_mapping
+
+GET /legiscan/_mapping
+
+GET /legiscan/bill_doc/_search
+{
+    "size": 50,
+    "query" : {
+        "nested": {
+           "path": "progress",
+           "query": {
+               "match": {
+                  "progress.event": "Passed"
+               }
+           }
+        }
+    }    
+}
+
+GET /legislation/bill/_search
+{
+  "query": {
+    "fuzzy": {
+      "description": {
+        "value": "education",
+        "boost": 1,
+        "fuzziness": 2,
+        "prefix_length": 0,
+        "max_expansions": 100
+      }
+    }
+  }
+}
+
+GET legislation/people/_search 
+{
+  "from": 0,
+  "size": 700, 
+  "query" : {
+    "match": {
+      "party": "D"
+    }
+  }
+}
+
+GET legislation/people/_search 
+{
+  "from": 10,
+  "size": 50, 
+  "query" : {
+    "match": {
+      "party": "R"
+    }
+  }
+}
+
+
+GET legislation/bill/_search
+{
+  "query": {
+    "fuzzy": {
+      "description": {
+        "value": "school",
+        "boost": 1.2,
+        "fuzziness": 2,
+        "prefix_length": 0,
+        "max_expansions": 100
+      }
+    }
+  },
+  "from" : 0,
+  "size": 1000
+}
+
+GET shinyapp/userData/_search?q=*
+
+GET shinyapp/userData/_search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+GET shinyapp/userData/_search 
+{
+  "query" : {
+    "range": {
+      "msasplot_mouse_over.data.x": {
+        "gte": 40,
+        "lte": 92
+      }
+    }
+  }
+}
+
+
