@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Working in the [Data] Mines</title>
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Billy Buchanan">
+		<meta name="title" content="Director of Data, Research, and Accountability">
+		<meta name="sdpCohort" content="The Legendary Cohort V">
+		<meta name="organization" content="Fayette County Public Schools">
+		<meta name="hostOrganization" content="Strategic Data Project">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h2>Working in the [Data] Mines</h2>
+					<p>
+						<small>Billy Buchanan</small><br>
+						<small>Director of Data, Research, and Accountability</small><br>
+						<small>Fayette County Public Schools</small><br>
+					</p>
+				</section>
+
+				<section>
+					<h2>Overview</h2>
+					<section>
+						<ul>
+							<li>Background</li>
+							<li>Use Cases</li>
+							<li>Doing data mining</li>
+							<li>Your Work</li>
+						</ul>
+					</section>
+					<section>
+						<h1>Ask questions as you think of them.</h1>
+						<small style="font-size: 12px">Honestly, I don't mind and don't bite.</small>
+					</section>
+					<section>
+						<p>I'll be switching back and forth between the slide deck and some programming environments.
+						If you need me to go back over something or to flip back to the previous screen feel free to ask.</p>
+					</section>
+				</section>
+
+				<!-- Example of nested vertical slides -->
+				<section>
+					<h1>Background</h1>
+					<section>
+						<h3>Why should you care about this?</h3>
+						<ol class="fragment">
+							<li>$1,507,849 </li>
+							<li>$2,913,122 </li>
+							<li>$548,435 </li>
+							<li>$625,452</li>
+							<li>$770,304</li>
+						</ol>
+						<aside class="notes">
+							Imagine you released an RFP for a data warehouse/BI platform and asked for a 5 year cost
+							estimate.  Could you identify which of the values listed above are fictitious for a district
+							of ~ 42k students?
+						</aside>
+					</section>
+					<section>
+						<h3>Why should you care about this?</h3>
+						<ol>
+							<li style="color:#0066ff"><span>$1,507,849</span></li>
+							<li style="color:#ff9933"><span>$2,913,122</span></li>
+							<li style="color:#ff9933">$548,435</li>
+							<li style="color:#0066ff">$625,452</li>
+							<li style="color:#ff9933">$770,304</li>
+						</ol>
+						<aside class="notes">
+							The $1.5M and $625K values were made up.
+							More importantly, how many of us would feel comfortable making a purchase this large without
+							being able to quantify uptake and understand usage?
+						</aside>
+					</section>
+					<section>
+						<h3>What is data mining?</h3>
+						<ul>
+							<li>Exploratory Data Analysis</li>
+							<li>Text/Sentiment Analysis</li>
+							<li>Machine Learning/Inferential Statistics</li>
+						</ul>
+						<aside class="notes">
+							Data mining grew out of "business analytics."  The analyst may or may not have had an
+							understanding of more sophisticated statistical methods, but could recognize patterns in
+							aggregate numbers, visualizations, or with the use of software that would automate fitting
+							multiple models for users.  Although this grew out of looking at a bit more mundane data, we
+							live in an age where we are able to get a lot of interesting data without having to burden
+							others with data collection.
+						</aside>
+					</section>
+					<section>
+						<h3>Types of ML</h3>
+						<ul>
+							<li>Supervised machine learning is used to build predictive models when the outcomes are observed.</li>
+							<li>Unsupervised machine learning is used to classify observations into unobserved groups.</li>
+						</ul>
+						<aside class="notes">
+							Unsupervised learning 1 - PCA, Exploratory LCA, LTA, etc...
+							Unsupervised learning 2 - K-Means, Heirarchical Clustering, etc...
+							Unlike econometric-based approaches to data analysis, we don't necessarily care about a
+							specific parameter as much as we care about modeling variance in the data.  The tools shown
+							today are more closely related to the first two areas, but I'll definitely spend a bit of
+							time talking about the last area as well.
+						</aside>
+					</section>
+				</section>
+
+				<section>
+					<h1>Use Cases</h1>
+					<section>
+						<br>
+						<h3>Quantifying uptake of new tools</h3>
+						<p><a href="http://sdp.cepr.harvard.edu/files/cepr-sdp/files/metamattersreport.pdf">Meta Matters</a></p>
+						<ul>
+							<li>Were staff actually using the assessment data the district was paying so much for?</li>
+							<li>Could we classify users into distinct groups based on observable behavior?</li>
+							<li>How can we learn more about the user experience without having to do tons of surveys?</li>
+						</ul>
+						<aside class="notes">
+							Had records for ~39k interactions (or lack thereof).  Fitted a multi-level Latent Class
+							model with five within user classes and five between user classes.  Our interest was at the
+							between user level, but wanted to also be able to classify user interactions within sessions.
+							We found that this number was invariant to other factors (e.g., educational level, days the
+							system was accessed) and will be able to further test things in the near future.
+						</aside>
+					</section>
+					<section>
+						<br><br>
+						<h3>Understanding and Improving the User Experience</h3>
+						<p style="color:#ffff00">If you're developing reports, you should want to answer these questions:</p>
+						<ul>
+							<li>Are users making use of the interactive components?</li>
+							<li>Are there specific pathways that lead users to leverage some of these tools more frequently?</li>
+							<li>What effect does changing one of the user interface elements have on the overall user experience?</li>
+						</ul>
+						<aside class="notes">
+							Will share some examples of language you can insert into an RFP/contract to get vendors to
+							provide you with access to these data.
+
+							Will show example of what this might look like using an R-application.
+						</aside>
+					</section>
+					<section>
+						<p style="font-size:28px">
+							<strong><u>Monitoring</u></strong>. The Vendor shall describe in detail what capabilities
+							the BI platform has to collect usage metrics from end-users using the product. This should
+							specifically address the level of detail that is possible to record (e.g., can the BI
+							platform allow us to track when specific elements in the user-interface are used, can this
+							be time and user stamped).
+						</p>
+						<aside class="notes">
+							user- and time-stamped entries are crucial to understanding the user sessions.  There could
+							be distinct within user differences based on the time of day when they are viewing the data
+							and/or reports that might help to explain why they may/may not be using particular UI elements.
+						</aside>
+					</section>
+					<section>
+						<p style="font-size:28px">
+							<strong><u>A/B Testing</u></strong>. The Vendor shall also discuss whether or not the BI
+							platform provides any native support or functionality to implement A/B testing. If the
+							platform does not support this functionality, the Vendor shall discuss how the support
+							clients testing and revising user interface elements and interaction functionality in
+							reports and dashboards.
+						</p>
+						<aside class="notes">
+							Basically, if we are going to change the layout of a report or are getting ready to roll out
+							a new version of an existing report we should be able to understand how that might affect
+							end users.  The Boston Museum of Science does a ton of work in this area with their exhibits
+							on a coarser grained level, but is constantly evaluating how their presentation of materials
+							could be made more user friendly and effective.
+						</aside>
+					</section>
+					<section>
+						<p style="font-size:28px">
+							<strong><u>UI/UX Collection.</u></strong> It is expected that [we] will have the ability to
+							collect extensive telemetry data to develop a more robust understanding of the user
+							experience, for continuous improvement of the reports delivered to end-users, and to more
+							carefully evaluate how data use and access affects teaching and learning. The Vendor shall
+							describe in detail what capabilities exist to collect these data, how those data would be
+							stored, and the level of detail at which these data can be collected. If the proposed
+							solution does not include the capacity to capture and store data on interactions with user
+							interface “widgets”, controllers, forms, and event-listener firings, the Vendor shall
+							propose methods by which [we] may accomplish this goal.
+						</p>
+						<aside class="notes">
+							Here we just want finer grained detail to the point where we could basically reconstruct
+							what the end user did from the point of entry until the close of the session.  We have some
+							idea about the effect of data use on a broader schedule, but there may be significant within
+							classroom heterogeneity that isn't possible to quantify otherwise.  So is educator A more
+							effective than educator B at supporting struggling students because they are more deliberate
+							about reviewing data on their struggling students more regularly?  How do the different usage
+							patterns vary across levels of value-added?
+						</aside>
+					</section>
+					<section>
+						<p style="font-size:28px">
+							<strong><u>Funnel/Click-Thru.</u></strong>  The logging and data collection capabilities of
+							the system must allow [us] to conduct funnel and/or click-thru analyses. The collection
+							requirements at this level are time- and user-stamped records that include the name/id of
+							the report being viewed and a session ID that is sequential by user and day. These data
+							should be collected from the point at which the user logs into the system and continue
+							until the user logs out or a timeout disconnects the user from the system.
+						</p>
+						<aside class="notes">
+							This is more about understanding the pathway through the platform.  Where do users begin?
+							How long does it take for them to move to the next view and what is the second thing that
+							they look at?
+						</aside>
+					</section>
+					<section>
+						<br>
+						<br>
+						<h3>Analyzing the Analyzers</h3>
+						<ul>
+							<li>How similar are the research/data requests that your department gets?</li>
+							<li>Are there seasonal components in the requests (e.g., specific requests happen regularly at certain points of the year)?</li>
+							<li>How does the quality/clarity of the request/research questions vary by end users?</li>
+						</ul>
+						<aside class="notes">
+							If we can identify small variances in requests, we can parameterize our code and avoid having
+							to develop new queries all the time.  And if those queries occur at regular intervals, we can
+							schedule tasks to run to generate the reports/data sets automatically.  More importantly, if
+							we analyze the quality of the request, we can start to understand where we may need to
+							provide additional training/support for end-users to make requests that will get them results
+							faster and more consistently.
+						</aside>
+					</section>
+					<section>
+						<br>
+						<br>
+						<h3>Conversion/Click-Thru</h3>
+						<ul>
+							<li>When users go to your organization's website, where do they go from there?</li>
+							<li>Do highly effective educators navigate dashboard systems in similar ways to less experienced/skilled educators?</li>
+							<li>How long are users taking to view specific dashboards/reports?</li>
+						</ul>
+						<aside class="notes">
+							What if we could make small modifications to the website to direct/guide users to the
+							information they are trying to find?
+						</aside>
+					</section>
+					<section>
+						<br>
+						<br>
+						<h3>Current/Historical Legislative Trends</h3>
+						<ul>
+							<li>How easy is it for leaders in your organization to quickly identify and see proposed legislative changes?</li>
+							<li>Using open APIs like <a href="http://www.legiscan.com">Legiscan</a> we can track state legislation and mine the text to identify trends in the proposed legislation</li>
+							<li>This can also make it easier to keep your parents and community members informed about proposed changes to laws that effect the education sector in your community.</li>
+						</ul>
+						<aside class="notes">
+
+						</aside>
+					</section>
+				</section>
+
+
+				<section>
+					<h1>Doing data mining</h1>
+					<section>
+						<h3>Tools</h3>
+						<p><a href="https://www.elastic.co">The Elastic Stack</a></p>
+						<ul>
+							<li><a href="https://www.elastic.co/downloads/elasticsearch">Elasticsearch</a> is a Not Only Structured Query Language (NoSQL) database built on Apache Lucene</li>
+							<li><a href="https://www.elastic.co/downloads/logstash">Logstash</a> is the tool that is missing from your system administrators' lives</li>
+							<li><a href="https://www.elastic.co/downloads/kibana">Kibana</a> makes everything prettier and a bit more user-friendly</li>
+						</ul>
+						<aside class="notes">
+							These tools make your life a lot easier for doing high level data mining
+						</aside>
+					</section>
+					<section>
+						<p>Once you have data loaded into <a href="https://www.elastic.co/downloads/elasticsearch">Elasticsearch</a>,
+							you can query the text from <a href="https://www.elastic.co">Kibana</a> to do some
+							exploratory data analysis.</p>
+						<div>
+							If the data are rectangularized from the example code:
+							<pre><code data-trim data-noescape>
+								http://localhost:9200/legislation/bill:description="education"
+							</code></pre>
+						</div>
+						<div>
+							Or, if the data are based on the mapping with nested objects
+							<pre><code data-trim data-noescape>
+								http://localhost:9200/legiscan/bill_doc:description="education"
+							</code> </pre>
+						</div>
+						<aside class="notes">
+						</aside>
+					</section>
+					<section>
+						<br>
+						<br>
+						<h3>Looking at user interaction data:</h3>
+						<p>These user interaction data are all generated from an R/Shiny-based application I put together
+							to help visualize the Mississippi's Statewide Accountability System (MSAS).</p>
+						<p>The code for
+							the tool is available here:  <a href="https://github.com/wbuchanan/MSASExplorer">MSASExplorer</a></p>
+						<aside class="notes">
+						</aside>
+					</section>
+					<section>
+						<br><br>
+						<h3>Three methods to query the data</h3>
+						<p>Using the <code data-trim data-noescape>curl</code> command line tool:</p>
+						<pre><code data-trim data-noescape>curl -XGET '127.0.0.1:9200/shinyapp/userData/_search?q=*' </code> </pre>
+						<p>Directly from the web browser</p>
+						<pre><code data-trim data-noescape>http://127.0.0.1:9200/shinyapp/userData/_search?q=*</code> </pre>
+						<p>Using the <code data-trim data-noescape>Sense</code> extension/Kibana application</p>
+						<pre><code data-trim data-noescape>
+							GET shinyapp/userData/_search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+						</code></pre>
+					</section>
+					<section>
+						<p>Can also put together more complex queries and restrict the fields that are returned</p>
+						<pre><code data-trim data-noescape>
+							GET /research_requests/request/_search
+{
+    "query": {
+        "bool": {
+            "must": {
+                "match" : {
+                    "InternalExternal" : "Internal"
+                }
+            },
+            "must_not": {
+                "match" : {
+                    "Status" : "Completed"
+                }
+            }
+        }
+    },
+    "fields": [
+       "StatusDate", "AssignedTo", "Status", "DataUsedFor", "DataNeeded"
+    ]
+}
+						</code></pre>
+					</section>
+					<section>
+						<p>Can also query records based on the data underlying the position of the mouse in the visualization</p>
+						<pre><code data-trim data-noescape>
+							GET shinyapp/userData/_search
+{
+  "query" : {
+    "range": {
+      "msasplot_mouse_over.data.x": {
+        "gte": 40,
+        "lte": 92
+      }
+    }
+  }
+}
+						</code></pre>
+					</section>
+					<section>
+						<br><br>
+						<p>Can use these tools to monitor important legislation as well:</p>
+						<pre><code data-trim data-noescape>
+
+						</code></pre>
+					</section>
+					<section>
+						<h3>Other tools</h3>
+						<ul>
+							<li><a href="http://www.knime.org/knime-analytics-platform">KNIME</a></li>
+							<li><a href="https://my.rapidminer.com/nexus/account/index.html#downloads">RapidMiner</a></li>
+							<li><a href="http://orange.biolab.si/">Orange</a></li>
+							<li><a href="http://www.statmodel.com/">Mplus</a></li>
+						</ul>
+						<aside class="notes">
+							Ok, Mplus isn't really data mining software, but it does have exceptional functionality for
+							latent class analysis (e.g., unsupervised learning).  The other three tools also use different
+							interfaces from what you may be used to, but could be helpful when explaining the analysis
+							process to other audiences.  They are all GUI-based, but unlike things in R, SPSS, and Stata,
+							instead of the GUI generating the commands, the GUI is used to define a workflow from the
+							point of data ingestion to the point of completion.
+						</aside>
+					</section>
+				</section>
+
+				<section data-autoslide="30000">
+					<h1>Your Work</h1>
+					<aside class="notes">
+					</aside>
+				</section>
+				<section data-autoslide="2500">
+					<small>Oh...and just in case I forgot to mention this already....</small>
+				</section>
+				<section>
+					<h1>I'm Hiring</h1>
+					<p><a href="https://www.applitrack.com/fayette/onlineapp/jobpostings/view.asp?internaltransferform.Url=&category=Technology+-+Salaried" class="reveal" style="color:#ffff00; font-weight:bold; font-size: 42px;">
+					If you or anyone you know might be interested in moving to Wildcat country to change how data is used in education, let me know or click on this link to see the posting.
+					</a></p>
+					<aside class="notes">
+					</aside>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				slideNumber: true,
+				touch: true,
+				previewLinks: true,
+				history: true,
+				center: true,
+				autoSlideStoppable: false,
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+				transitionSpeed: 'slow',
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>

@@ -1,0 +1,21 @@
+"mappings": {
+"people": {
+"properties": {
+"committee_id": { "type": "string", "index": "not_analyzed" },
+"committee_sponsor": { "type": "long" },
+"district": { "type": "string", "index": "not_analyzed" },
+"first_name": { "type": "string", "index": "not_analyzed" },
+"ftm_eid": { "type": "string", "index": "not_analyzed" },
+"last_name": { "type": "string", "index": "not_analyzed" },
+"middle_name": { "type": "string", "index": "not_analyzed" },
+"name": { "type": "string", "index": "not_analyzed" },
+"nickname": { "type": "string", "index": "not_analyzed" },
+"party": { "type": "string", "index": "not_analyzed" },
+"party_id": { "type": "string", "index": "not_analyzed" },
+"people_id": { "type": "long" },
+"role": { "type": "string", "index": "not_analyzed" },
+"role_id": { "type": "long" },
+"suffix": { "type": "string", "index": "not_analyzed" }
+}
+}
+}
